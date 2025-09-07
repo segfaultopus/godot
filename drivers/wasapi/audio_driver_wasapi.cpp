@@ -216,7 +216,8 @@ Error AudioDriverWASAPI::audio_device_init(AudioDeviceWASAPI *p_device, bool p_i
 	ERR_FAIL_COND_V(hr != S_OK, ERR_CANT_OPEN);
 
 	if (p_device->device_name == "Default") {
-		hr = enumerator->GetDefaultAudioEndpoint(p_input ? eCapture : eRender, eConsole, &output_device);
+		//hr = enumerator->GetDefaultAudioEndpoint(p_input ? eCapture : eRender, eConsole, &output_device);
+		hr = enumerator->GetDefaultAudioEndpoint(eRender, eConsole, &output_device);
 	} else {
 		ComPtr<IMMDeviceCollection> devices = nullptr;
 
@@ -391,7 +392,8 @@ Error AudioDriverWASAPI::audio_device_init(AudioDeviceWASAPI *p_device, bool p_i
 	}
 
 	if (!using_audio_client_3) {
-		DWORD streamflags = 0;
+		//DWORD streamflags = 0;
+		DWORD streamflags = AUDCLNT_STREAMFLAGS_LOOPBACK;
 		if ((DWORD)mix_rate != pwfex->nSamplesPerSec) {
 			streamflags |= AUDCLNT_STREAMFLAGS_RATEADJUST;
 			pwfex->nSamplesPerSec = mix_rate;
